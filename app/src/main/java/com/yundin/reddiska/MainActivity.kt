@@ -1,5 +1,6 @@
 package com.yundin.reddiska
 
+import android.annotation.SuppressLint
 import android.content.Intent
 import android.net.Uri
 import androidx.appcompat.app.AppCompatActivity
@@ -14,6 +15,7 @@ import android.widget.Toast
 
 class MainActivity : AppCompatActivity() {
 
+    @SuppressLint("SetJavaScriptEnabled")
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
@@ -51,6 +53,7 @@ class MainActivity : AppCompatActivity() {
 
         if (intent.data == null) {
             val webview = WebView(this)
+            webview.settings.javaScriptEnabled = true
             webview.webViewClient = object: WebViewClient() {
                 override fun shouldOverrideUrlLoading(view: WebView?, request: WebResourceRequest?): Boolean {
                     if (request!!.url.toString().startsWith("yundin.reddit.app")) {
