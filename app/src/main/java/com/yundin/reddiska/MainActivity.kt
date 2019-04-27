@@ -1,15 +1,21 @@
 package com.yundin.reddiska
 
+import android.content.Intent
 import android.net.Uri
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.util.Log
+import android.webkit.WebResourceRequest
+import android.webkit.WebView
+import kotlinx.android.synthetic.main.activity_main.*
+import android.webkit.WebViewClient
+import android.widget.Toast
+
 
 class MainActivity : AppCompatActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        setContentView(R.layout.activity_main)
 
         intent.data?.let {
             val start1 = System.currentTimeMillis()
@@ -39,6 +45,27 @@ class MainActivity : AppCompatActivity() {
                 paramsMap2[key] = new.getQueryParameter(key)!!
             }
             Log.d("HAHAHA2", (System.currentTimeMillis() - start2).toString())
+
+            Toast.makeText(this, paramsMap["access_token"], Toast.LENGTH_SHORT).show()
+        }
+
+        if (intent.data == null) {
+            val webview = WebView(this)
+            webview.webViewClient = object: WebViewClient() {
+                override fun shouldOverrideUrlLoading(view: WebView?, request: WebResourceRequest?): Boolean {
+                    if (request!!.url.toString().startsWith("yundin.reddit.app")) {
+                        Toast.makeText(this@MainActivity, "Got it", Toast.LENGTH_SHORT).show()
+                        val intent = Intent(this@MainActivity, MainActivity::class.java)
+                        intent.data = request.url
+                        startActivity(intent)
+                        finish()
+                        return true
+                    }
+                    return false
+                }
+            }
+            setContentView(webview)
+            webview.loadUrl("https://www.reddit.com/api/v1/authorize.compact?client_id=lD712uL-4ow4rw&response_type=token&state=abcdefg&redirect_uri=yundin.reddit.app://redirect&scope=identity, edit, flair, history, modconfig, modflair, modlog, modposts, modwiki, mysubreddits, privatemessages, read, report, save, submit, subscribe, vote, wikiedit, wikiread")
         }
     }
 }
