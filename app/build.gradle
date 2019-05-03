@@ -24,9 +24,8 @@ android {
 
 ext {
     rxandroid_version = '2.1.1'
-    rxjava_version = '2.2.8'
+    rxkotlin_version = '2.3.0'
     retrofit_version = '2.5.0'
-    gson_version = '2.5.0'
 }
 
 dependencies {
@@ -41,9 +40,10 @@ dependencies {
 
     // Rx
     implementation "io.reactivex.rxjava2:rxandroid:$rxandroid_version"
-    implementation "io.reactivex.rxjava2:rxjava:$rxjava_version"
+    implementation "io.reactivex.rxjava2:rxkotlin:$rxkotlin_version"
 
     // Networking
     implementation "com.squareup.retrofit2:retrofit:$retrofit_version"
-    implementation "com.squareup.retrofit2:converter-gson:$gson_version"
+    implementation "com.squareup.retrofit2:converter-gson:$retrofit_version"
+    implementation "com.squareup.retrofit2:adapter-rxjava2:$retrofit_version"
 }
