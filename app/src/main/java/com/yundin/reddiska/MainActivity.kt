@@ -2,13 +2,13 @@ package com.yundin.reddiska
 
 import android.content.Intent
 import android.net.Uri
-import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
-import android.util.Log
-import android.webkit.WebResourceRequest
 import android.webkit.WebView
-import android.webkit.WebViewClient
 import android.widget.Toast
+import androidx.appcompat.app.AppCompatActivity
+import com.yundin.reddiska.data.repository.AuthRepository
+import io.reactivex.android.schedulers.AndroidSchedulers
+import io.reactivex.rxkotlin.subscribeBy
 
 
 class MainActivity : AppCompatActivity() {
@@ -24,15 +24,29 @@ class MainActivity : AppCompatActivity() {
         }
 
         if (intent.data == null) {
-            val webView = WebView(this)
-            webView.redditLogin { uri ->
-                val intent = Intent(this, MainActivity::class.java)
-                intent.data = uri
-                startActivity(intent)
-                finish()
-            }
-            setContentView(webView)
+            val repo = AuthRepository()
+            repo.getAppToken()
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribeBy (
+                    onSuccess = {
+                        Toast.makeText(this, it, Toast.LENGTH_SHORT).show()
+                    },
+                    onError = {
+                        it.printStackTrace()
+                    }
+                )
         }
+    }
+
+    private fun startLogin() {
+        val webView = WebView(this)
+        webView.redditLogin { uri ->
+            val intent = Intent(this, MainActivity::class.java)
+            intent.data = uri
+            startActivity(intent)
+            finish()
+        }
+        setContentView(webView)
     }
 
     private fun resolveUriParams(uri: Uri): Map<String, String> {
