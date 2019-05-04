@@ -6,15 +6,17 @@ import android.os.Bundle
 import android.webkit.WebView
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
+import androidx.lifecycle.Observer
+import com.yundin.reddiska.data.Resource
 import com.yundin.reddiska.data.repository.AuthRepository
-import io.reactivex.android.schedulers.AndroidSchedulers
-import io.reactivex.rxkotlin.subscribeBy
+import kotlinx.android.synthetic.main.activity_main.*
 
 
 class MainActivity : AppCompatActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+        setContentView(R.layout.activity_main)
 
         intent.data?.let {
             val params = resolveUriParams(it)
@@ -26,15 +28,13 @@ class MainActivity : AppCompatActivity() {
         if (intent.data == null) {
             val repo = AuthRepository()
             repo.getAppToken()
-                .observeOn(AndroidSchedulers.mainThread())
-                .subscribeBy (
-                    onSuccess = {
-                        Toast.makeText(this, it, Toast.LENGTH_SHORT).show()
-                    },
-                    onError = {
-                        it.printStackTrace()
+                .observe(this, Observer {
+                    text.text = when {
+                        it.status == Resource.Status.SUCCESS -> it.data!!.accessToken
+                        it.status == Resource.Status.ERROR -> it.errorMessage!!
+                        else -> "LOADING"
                     }
-                )
+                })
         }
     }
 

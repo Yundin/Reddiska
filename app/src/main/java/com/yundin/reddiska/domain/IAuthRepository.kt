@@ -1,7 +1,9 @@
 package com.yundin.reddiska.domain
 
-import io.reactivex.Single
+import androidx.lifecycle.LiveData
+import com.yundin.reddiska.data.Resource
+import com.yundin.reddiska.data.api.AppAuthResponse
 
 interface IAuthRepository {
-    fun getAppToken(): Single<String>
+    fun getAppToken(): LiveData<Resource<AppAuthResponse>>
 }
