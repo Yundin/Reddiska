@@ -8,6 +8,10 @@ class Resource<T>(val status: Status, val data: T?, val errorMessage: String?) {
         fun <T> error(message: String): Resource<T> = Resource(Status.ERROR, null, message)
     }
 
+    fun isSuccess() = status == Status.SUCCESS
+    fun isError() = status == Status.ERROR
+    fun isLoading() = status == Status.LOADING
+
     enum class Status {
         LOADING,
         SUCCESS,
