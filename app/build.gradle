@@ -24,6 +24,7 @@ android {
 dependencies {
     def retrofit_version = '2.5.0'
     def room_version = '2.1.0-alpha07'
+    def viewmodel_version = '2.1.0-alpha04'
 
     implementation fileTree(dir: 'libs', include: ['*.jar'])
     implementation"org.jetbrains.kotlin:kotlin-stdlib-jdk7:$kotlin_version"
@@ -33,6 +34,9 @@ dependencies {
     testImplementation 'junit:junit:4.12'
     androidTestImplementation 'androidx.test:runner:1.1.1'
     androidTestImplementation 'androidx.test.espresso:espresso-core:3.1.1'
+
+    // ViewModel
+    implementation "androidx.lifecycle:lifecycle-extensions:$viewmodel_version"
 
     // Networking
     implementation "com.squareup.retrofit2:retrofit:$retrofit_version"
