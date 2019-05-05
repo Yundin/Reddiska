@@ -1,4 +1,4 @@
-package com.yundin.reddiska
+package com.yundin.reddiska.presentation.main
 
 import android.content.Intent
 import android.net.Uri
@@ -7,12 +7,15 @@ import android.webkit.WebView
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import androidx.lifecycle.Observer
-import com.yundin.reddiska.data.Resource
-import com.yundin.reddiska.data.repository.AuthRepository
+import androidx.lifecycle.ViewModelProviders
+import com.yundin.reddiska.R
+import com.yundin.reddiska.redditLogin
 import kotlinx.android.synthetic.main.activity_main.*
 
 
 class MainActivity : AppCompatActivity() {
+
+    private lateinit var viewModel: MainViewModel
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -26,15 +29,14 @@ class MainActivity : AppCompatActivity() {
         }
 
         if (intent.data == null) {
-            val repo = AuthRepository()
-            repo.getAppToken()
-                .observe(this, Observer {
-                    text.text = when {
-                        it.status == Resource.Status.SUCCESS -> it.data!!.accessToken
-                        it.status == Resource.Status.ERROR -> it.errorMessage!!
-                        else -> "LOADING"
-                    }
-                })
+            viewModel = ViewModelProviders.of(this).get(MainViewModel::class.java)
+            viewModel.posts.observe(this, Observer {
+                text.text = when {
+                    it.isSuccess() -> it.data!!.joinToString()
+                    it.isError() -> it.errorMessage!!
+                    else -> "LOADING"
+                }
+            })
         }
     }
 
