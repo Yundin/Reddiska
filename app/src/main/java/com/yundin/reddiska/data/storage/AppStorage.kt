@@ -1,12 +1,9 @@
 package com.yundin.reddiska.data.storage
 
-import android.app.Application
-import android.content.Context
 import android.content.SharedPreferences
+import javax.inject.Inject
 
-class AppStorage(app: Application) {
-
-    private val sharedPrefs: SharedPreferences = app.getSharedPreferences("myprefs", Context.MODE_PRIVATE)
+class AppStorage @Inject constructor(private val sharedPrefs: SharedPreferences) {
 
     fun getAppToken(): String? {
         return sharedPrefs.getString("app_token", null)
