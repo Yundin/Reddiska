@@ -6,12 +6,7 @@ import dagger.Binds
 import dagger.Module
 import javax.inject.Singleton
 
-@Module(
-    includes = [
-        PersistenceModule::class,
-        NetworkModule::class
-    ]
-)
+@Module
 interface RepositoryModule {
 
     @Singleton
