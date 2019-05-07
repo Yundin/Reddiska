@@ -25,7 +25,7 @@ class MainActivity : AppCompatActivity() {
         viewModel = ViewModelProviders.of(this, viewModelFactory).get(MainViewModel::class.java)
         viewModel.posts.observe(this, Observer {
             text.text = when {
-                it.isSuccess() -> it.data!!.joinToString()
+                it.isSuccess() -> it.toString()
                 it.isError() -> it.errorMessage!!
                 else -> "LOADING"
             }

@@ -11,7 +11,7 @@ class AppStorage @Inject constructor(private val sharedPrefs: SharedPreferences)
 
     fun saveAppToken(token: String) {
         sharedPrefs.edit()
-            .putString("app_token", token)
+            .putString("app_token", "Bearer $token")
             .apply()
     }
 }
