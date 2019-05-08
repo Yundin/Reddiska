@@ -2,13 +2,14 @@ package com.yundin.reddiska.data.repository
 
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
-import androidx.lifecycle.Transformations
 import com.yundin.reddiska.data.Resource
 import com.yundin.reddiska.data.api.AuthApi
 import com.yundin.reddiska.data.api.PostsApi
 import com.yundin.reddiska.data.api.PostsResponse
 import com.yundin.reddiska.data.storage.AppStorage
 import com.yundin.reddiska.domain.IPostsRepository
+import com.yundin.reddiska.util.mapResource
+import com.yundin.reddiska.util.switchMapResource
 import java.util.*
 import javax.inject.Inject
 
@@ -19,26 +20,26 @@ class PostsRepository @Inject constructor(
 ): IPostsRepository {
 
     override fun getTopPosts(): LiveData<Resource<PostsResponse>> {
-        return Transformations.switchMap(getAppToken()) {
-            if (it.isSuccess()) {
-                val data = postsApi.getTopPosts(it.data!!)
-                return@switchMap Transformations.switchMap(data) {
-                    if (it.isError() && it.errorMessage == "Non 2xx") {
-                        Transformations.switchMap(reloadAppToken()) {
-                            getTopPosts()
-                        }
-                    } else {
-                        MutableLiveData<Resource<PostsResponse>>().apply {
-                            postValue(it)
-                        }
-                    }
+        return getAppToken()
+            .switchMapResource(
+                onSuccess = {
+                    postsApi.getTopPosts(it.data!!)
+                        .switchMapResource(
+                            onError = {
+                                if (it.errorCode != null) {
+                                    reloadAppToken()
+                                        .switchMapResource(
+                                            onSuccess = { getTopPosts() }
+                                        )
+                                } else {
+                                    MutableLiveData<Resource<PostsResponse>>().apply {
+                                        postValue(it.adaptType())
+                                    }
+                                }
+                            }
+                        )
                 }
-            } else {
-                return@switchMap MutableLiveData<Resource<PostsResponse>>().apply {
-                    postValue(Resource(it.status, null, it.errorMessage))
-                }
-            }
-        }
+            )
     }
 
     fun getAppToken(): LiveData<Resource<String>> {
@@ -49,29 +50,31 @@ class PostsRepository @Inject constructor(
             }
         }
         val uuid = UUID.randomUUID().toString()
-        val appAuthResponse = authApi.authorizeApp("https://www.reddit.com/api/v1/access_token", uuid)
-        return Transformations.map(appAuthResponse) {
-            if (it.isSuccess()) {
-                appStorage.saveAppToken(it.data!!.accessToken)
-                return@map Resource.success(it.data.accessToken)
-            } else if (it.isLoading()) {
-                return@map Resource.loading<String>()
-            }
-            return@map Resource.error<String>("Couldn't register app")
-        }
+        return authApi
+            .authorizeApp("https://www.reddit.com/api/v1/access_token", uuid)
+            .mapResource(
+                onSuccess = {
+                    appStorage.saveAppToken(it.data!!.accessToken)
+                    Resource.success(it.data.accessToken)
+                },
+                onError = {
+                    Resource.error("Couldn't register app")
+                }
+            )
     }
 
     fun reloadAppToken(): LiveData<Resource<String>> {
         val uuid = UUID.randomUUID().toString()
-        val appAuthResponse = authApi.authorizeApp("https://www.reddit.com/api/v1/access_token", uuid)
-        return Transformations.map(appAuthResponse) {
-            if (it.isSuccess()) {
-                appStorage.saveAppToken(it.data!!.accessToken)
-                return@map Resource.success(it.data.accessToken)
-            } else if (it.isLoading()) {
-                return@map Resource.loading<String>()
-            }
-            return@map Resource.error<String>("Couldn't register app")
-        }
+        return authApi
+            .authorizeApp("https://www.reddit.com/api/v1/access_token", uuid)
+            .mapResource(
+                onSuccess = {
+                    appStorage.saveAppToken(it.data!!.accessToken)
+                    Resource.success(it.data.accessToken)
+                },
+                onError = {
+                    Resource.error("Couldn't register app")
+                }
+            )
     }
 }
