@@ -1,7 +1,7 @@
 package com.yundin.reddiska.util
 
 import androidx.lifecycle.LiveData
-import com.yundin.reddiska.data.Resource
+import com.yundin.reddiska.data.NetworkResource
 import retrofit2.*
 import java.lang.reflect.ParameterizedType
 import java.lang.reflect.Type
@@ -19,34 +19,34 @@ class LiveDataCallAdapterFactory: CallAdapter.Factory() {
         }
         val innerType = getParameterUpperBound(0, returnType as ParameterizedType)
         val rawInnerType = getRawType(innerType)
-        if (rawInnerType != Resource::class.java) {
-            throw IllegalArgumentException("LiveData's type must be Resource")
+        if (rawInnerType != NetworkResource::class.java) {
+            throw IllegalArgumentException("LiveData's type must be NetworkResource")
         }
         val resourceType = getParameterUpperBound(0, innerType as ParameterizedType)
         return LiveDataCallAdapter<Any>(resourceType)
     }
 }
 
-class LiveDataCallAdapter<R>(private val responseType: Type): CallAdapter<R, LiveData<Resource<R>>> {
+class LiveDataCallAdapter<R>(private val responseType: Type): CallAdapter<R, LiveData<NetworkResource<R>>> {
     override fun responseType(): Type = responseType
 
-    override fun adapt(call: Call<R>): LiveData<Resource<R>> {
-        return object : LiveData<Resource<R>>() {
+    override fun adapt(call: Call<R>): LiveData<NetworkResource<R>> {
+        return object : LiveData<NetworkResource<R>>() {
             val started = AtomicBoolean(false)
             override fun onActive() {
                 if (started.compareAndSet(false, true)) {
-                    postValue(Resource.loading())
+                    postValue(NetworkResource.loading())
                     call.enqueue(object : Callback<R> {
                         override fun onResponse(call: Call<R>, response: Response<R>) {
                             if (response.isSuccessful) {
-                                postValue(Resource.success(response.body()!!))
+                                postValue(NetworkResource.success(response.body()!!))
                             } else {
-                                postValue(Resource.error("Non 2xx"))
+                                postValue(NetworkResource.error("Non 2xx", response.code()))
                             }
                         }
 
                         override fun onFailure(call: Call<R>, t: Throwable) {
-                            postValue(Resource.error("Network error"))
+                            postValue(NetworkResource.error("Network error"))
                         }
                     })
                 }
