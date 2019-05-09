@@ -13,10 +13,12 @@ open class Resource<T>(val status: Status, val data: T?, val errorMessage: Strin
     fun isLoading() = status == Status.LOADING
 
     fun <X> adaptType(mapData: ((T?) -> X?)? = null): Resource<X> {
-        if (this is NetworkResource) {
-            NetworkResource(status, mapData?.invoke(data), errorMessage, errorCode)
+        return try {
+            @Suppress("UNCHECKED_CAST")
+            this as Resource<X>
+        } catch (e: ClassCastException) {
+            Resource(status, mapData?.invoke(data), errorMessage)
         }
-        return Resource(status, mapData?.invoke(data), errorMessage)
     }
 
     enum class Status {
