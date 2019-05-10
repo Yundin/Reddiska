@@ -1,4 +1,4 @@
-package com.yundin.reddiska.presentation
+package com.yundin.reddiska.presentation.base
 
 import android.view.LayoutInflater
 import android.view.ViewGroup

@@ -1,4 +1,4 @@
-package com.yundin.reddiska
+package com.yundin.reddiska.util
 
 import android.annotation.SuppressLint
 import android.net.Uri

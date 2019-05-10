@@ -1,4 +1,4 @@
-package com.yundin.reddiska.di
+package com.yundin.reddiska.util
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider

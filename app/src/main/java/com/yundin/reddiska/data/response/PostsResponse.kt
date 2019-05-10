@@ -1,4 +1,4 @@
-package com.yundin.reddiska.data.api
+package com.yundin.reddiska.data.response
 
 class PostsResponse(
         val kind: String,

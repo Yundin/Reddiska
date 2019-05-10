@@ -5,7 +5,7 @@
     <data>
         <variable
             name="post"
-            type="com.yundin.reddiska.data.api.Post"/>
+            type="com.yundin.reddiska.data.response.Post"/>
     </data>
 
     <androidx.constraintlayout.widget.ConstraintLayout

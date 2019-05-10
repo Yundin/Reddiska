@@ -8,7 +8,7 @@ import android.view.ViewGroup
 import android.webkit.WebView
 import android.widget.Toast
 import androidx.fragment.app.Fragment
-import com.yundin.reddiska.redditLogin
+import com.yundin.reddiska.util.redditLogin
 
 class LoginFragment: Fragment() {
 

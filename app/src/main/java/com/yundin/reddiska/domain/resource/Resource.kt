@@ -1,4 +1,4 @@
-package com.yundin.reddiska.data
+package com.yundin.reddiska.domain.resource
 
 open class Resource<T>(val status: Status, val data: T?, val errorMessage: String?) {
 

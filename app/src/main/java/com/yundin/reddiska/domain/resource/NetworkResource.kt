@@ -1,4 +1,4 @@
-package com.yundin.reddiska.data
+package com.yundin.reddiska.domain.resource
 
 class NetworkResource<T>(status: Status, data: T?, errorMessage: String?, val errorCode: Int?): Resource<T>(status, data, errorMessage) {
 

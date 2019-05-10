@@ -2,8 +2,8 @@ package com.yundin.reddiska.di.module
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
-import com.yundin.reddiska.di.ViewModelFactory
 import com.yundin.reddiska.presentation.main.MainViewModel
+import com.yundin.reddiska.util.ViewModelFactory
 import dagger.Binds
 import dagger.Module
 import dagger.multibindings.IntoMap

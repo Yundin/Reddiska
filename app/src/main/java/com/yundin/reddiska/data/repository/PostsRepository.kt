@@ -2,12 +2,12 @@ package com.yundin.reddiska.data.repository
 
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
-import com.yundin.reddiska.data.Resource
 import com.yundin.reddiska.data.api.AuthApi
 import com.yundin.reddiska.data.api.PostsApi
-import com.yundin.reddiska.data.api.PostsResponse
+import com.yundin.reddiska.data.response.PostsResponse
 import com.yundin.reddiska.data.storage.AppStorage
-import com.yundin.reddiska.domain.IPostsRepository
+import com.yundin.reddiska.domain.repository.IPostsRepository
+import com.yundin.reddiska.domain.resource.Resource
 import com.yundin.reddiska.util.mapResource
 import com.yundin.reddiska.util.switchMapResource
 import java.util.*

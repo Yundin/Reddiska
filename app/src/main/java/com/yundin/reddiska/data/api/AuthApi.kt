@@ -1,7 +1,8 @@
 package com.yundin.reddiska.data.api
 
 import androidx.lifecycle.LiveData
-import com.yundin.reddiska.data.NetworkResource
+import com.yundin.reddiska.data.response.AppAuthResponse
+import com.yundin.reddiska.domain.resource.NetworkResource
 import retrofit2.http.*
 
 interface AuthApi {

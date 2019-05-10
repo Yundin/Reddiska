@@ -1,7 +1,7 @@
 package com.yundin.reddiska.util
 
 import androidx.lifecycle.LiveData
-import com.yundin.reddiska.data.NetworkResource
+import com.yundin.reddiska.domain.resource.NetworkResource
 import retrofit2.*
 import java.lang.reflect.ParameterizedType
 import java.lang.reflect.Type
