@@ -21,6 +21,10 @@ class MainActivity : AppCompatActivity() {
 
         val binding: ActivityMainBinding = DataBindingUtil.setContentView(this, R.layout.activity_main)
         binding.lifecycleOwner = this
-        binding.viewmodel = ViewModelProviders.of(this, viewModelFactory).get(MainViewModel::class.java)
+
+        val viewModel = ViewModelProviders.of(this, viewModelFactory).get(MainViewModel::class.java)
+        binding.viewmodel = viewModel
+
+        binding.recycler.adapter = MainAdapter(viewModel.posts, this)
     }
 }
