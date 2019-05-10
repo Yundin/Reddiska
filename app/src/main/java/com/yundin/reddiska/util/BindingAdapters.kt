@@ -15,7 +15,7 @@ fun setGone(view: View, isGone: Boolean) {
 }
 
 @BindingAdapter("image_url")
-fun loadImage(view: ImageView, url: String) {
+fun loadImage(view: ImageView, url: String?) {
     Glide
             .with(view)
             .load(url)

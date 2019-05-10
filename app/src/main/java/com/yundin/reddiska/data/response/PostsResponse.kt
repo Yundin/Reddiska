@@ -114,7 +114,10 @@ class PostData(
         val is_video: Boolean,
         val preview: PostPreview,
         val all_awardings: List<Award>
-)
+) {
+    val needPreview
+        get() = url.endsWith(".jpg", true)
+}
 
 class Gilding(
         val gid_1: Int,
