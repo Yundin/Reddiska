@@ -20,7 +20,7 @@ abstract class BaseAdapter: RecyclerView.Adapter<BaseAdapter.ViewHolder>() {
     override fun getItemCount(): Int = data.size
 
     override fun onBindViewHolder(holder: ViewHolder, position: Int) {
-        holder.binding.setVariable(BR.post, data[position])
+        holder.binding.setVariable(BR.item, data[position])
     }
 
     class ViewHolder(val binding: ViewDataBinding): RecyclerView.ViewHolder(binding.root)
