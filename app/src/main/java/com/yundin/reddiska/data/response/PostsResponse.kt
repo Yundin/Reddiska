@@ -116,7 +116,7 @@ class PostData(
         val all_awardings: List<Award>
 ) {
     val needPreview
-        get() = url.endsWith(".jpg", true)
+        get() = url.endsWith(".jpg", true) || url.endsWith(".png", true) || post_hint == "image"
 }
 
 class Gilding(
@@ -126,14 +126,14 @@ class Gilding(
 )
 
 class PostPreview(
-        val images: List<Image>,
+        val images: List<ImageData>,
         val enabled: Boolean
 )
 
 class ImageData(
         val source: Image,
         val resolutions: List<Image>,
-        val variants: List<Image>,
+        val variants: List<ImageVariant>,
         val id: String
 )
 
@@ -142,6 +142,12 @@ class Image(
         val width: Int,
         val height: Int
 )
+
+class ImageVariant(
+        val gif: ImageData,
+        val mp4: ImageData
+)
+
 class Award(
         val is_enabled: Boolean,
         val count: Int,
