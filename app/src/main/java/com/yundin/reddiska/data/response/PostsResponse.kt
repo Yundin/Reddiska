@@ -133,7 +133,8 @@ class PostPreview(
 class ImageData(
         val source: Image,
         val resolutions: List<Image>,
-        val variants: List<ImageVariant>,
+        // TODO: get new model
+        // val variants: List<ImageVariant>,
         val id: String
 )
 
